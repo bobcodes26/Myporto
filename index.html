@@ -3,206 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saktiswarupa - Time Travel Portfolio</title>
+    <title>Saktiswarupa - Particle Dissolve Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* --- CSS Reset & Basics --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body, html { height: 100%; overflow: hidden; background: #000; }
 
-        body, html {
-            height: 100%;
-            overflow: hidden; /* Transition ke time scroll rokne ke liye */
-            background: #000;
-        }
-
-        /* =========================================
-           1. OLD UI (Windows 98 Style)
-           ========================================= */
-        #old-ui {
+        /* --- OLD UI (Windows Style) --- */
+        #old-ui-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #008080; /* Teal background */
+            inset: 0;
+            background: #008080;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10;
-            padding: 20px;
         }
 
-        /* Windows 98 Window Box */
-        .win98-window {
+        .win98-box {
             background: #c0c0c0;
             border: 2px solid;
             border-color: #fff #0a0a0a #0a0a0a #fff;
-            width: 400px;
-            max-width: 90%;
-            box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+            width: 350px;
+            padding: 2px;
         }
 
         .win98-title {
             background: linear-gradient(90deg, #000080, #1084d0);
             color: white;
             padding: 3px 10px;
+            font-size: 14px;
             font-weight: bold;
-            font-family: 'Courier New', monospace;
-            display: flex;
-            justify-content: space-between;
         }
 
-        .win98-content {
-            padding: 20px;
-            color: #000;
-            font-family: 'Times New Roman', serif;
+        .win98-body {
+            padding: 30px;
             text-align: center;
+            color: #000;
         }
-
-        .win98-content h1 { font-size: 1.5rem; margin-bottom: 10px; }
-        .win98-content p { font-size: 1rem; margin-bottom: 20px; }
 
         .win98-btn {
+            margin-top: 15px;
+            padding: 8px 20px;
             background: #c0c0c0;
             border: 2px solid;
             border-color: #fff #0a0a0a #0a0a0a #fff;
-            padding: 5px 15px;
             cursor: pointer;
+            font-weight: bold;
         }
 
-        /* --- WIND VANISH ANIMATION (Keyframes) --- */
-        @keyframes windVanish {
-            0% {
-                transform: translateX(0) translateY(0) rotate(0deg) scale(1);
-                opacity: 1;
-                filter: blur(0px);
-            }
-            20% {
-                transform: translateX(50px) translateY(-20px) rotate(5deg);
-                filter: blur(2px);
-            }
-            100% {
-                transform: translateX(150vw) translateY(-100px) rotate(45deg) scale(0.5);
-                opacity: 0;
-                filter: blur(15px);
-            }
+        /* --- CANVAS FOR PARTICLES --- */
+        #particle-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 11;
         }
 
-        /* Trigger class jo JS add karega */
-        .vanish-out {
-            animation: windVanish 1.5s ease-in forwards;
-            pointer-events: none; /* Gayab hote waqt click na ho */
-        }
-
-        /* =========================================
-           2. FUTURISTIC UI (2050 Style)
-           ========================================= */
+        /* --- FUTURE UI (2050) --- */
         #future-ui {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, #0a192f 0%, #02060c 100%);
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle, #0d1b2a 0%, #000 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: #64ffda; /* Neon blue/green */
-            opacity: 0; /* Shuru mein hidden */
-            transition: opacity 2s ease-in; /* Slow fade in */
+            color: #00f2ff;
+            opacity: 0;
+            transition: opacity 2s ease;
             z-index: 1;
         }
 
-        /* JS jab class lagayega tab dikhega */
-        #future-ui.visible {
-            opacity: 1;
-            overflow-y: auto; /* Ab scroll kar sakte hain */
+        #future-ui.show { opacity: 1; }
+
+        .glitch-text {
+            font-size: 3.5rem;
+            letter-spacing: 5px;
+            text-shadow: 0 0 15px #00f2ff;
+            margin-bottom: 20px;
         }
 
-        /* Futuristic Content Styling */
-        .futuristic-container {
-            text-align: center;
-            font-family: 'Orbitron', sans-serif; /* You'd need to link this font, using sans-serif default for now */
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            padding: 20px;
-        }
-
-        .futuristic-container h1 {
-            font-size: 3rem;
-            text-shadow: 0 0 10px #64ffda, 0 0 20px #64ffda;
-            margin-bottom: 10px;
-        }
-
-        .futuristic-container p {
-            color: #8892b0;
-            margin-bottom: 40px;
-        }
-
-        .glow-btn {
-            background: transparent;
-            border: 1px solid #64ffda;
-            color: #64ffda;
-            padding: 15px 30px;
-            font-size: 1rem;
-            cursor: pointer;
+        .neon-btn {
+            border: 1px solid #00f2ff;
+            padding: 10px 30px;
+            color: #00f2ff;
             text-decoration: none;
-            transition: all 0.3s;
-            box-shadow: 0 0 5px #64ffda;
+            box-shadow: 0 0 10px #00f2ff;
+            transition: 0.3s;
         }
 
-        .glow-btn:hover {
-            background: rgba(100, 255, 218, 0.1);
-            box-shadow: 0 0 15px #64ffda, 0 0 30px #64ffda;
-        }
-
+        .neon-btn:hover { background: #00f2ff; color: #000; }
     </style>
 </head>
 <body>
 
-    <div id="old-ui">
-        <div class="win98-window">
-            <div class="win98-title">
-                <span>Welcome.exe</span>
-                <span>[X]</span>
-            </div>
-            <div class="win98-content">
-                <h1>Old Portfolio</h1>
-                <p>Welcome to my classic website. Please update your browser to experience the future.</p>
-                <button class="win98-btn" onclick="startTransition()">Enter Future</button>
+    <div id="old-ui-container">
+        <div class="win98-box" id="capture-target">
+            <div class="win98-title">System Update</div>
+            <div class="win98-body">
+                <p>Old interface detected.</p>
+                <button class="win98-btn" onclick="disintegrate()">EVOLVE TO 2050</button>
             </div>
         </div>
     </div>
 
+    <canvas id="particle-canvas"></canvas>
+
     <div id="future-ui">
-        <div class="futuristic-container">
-            <h1>SAKTISWARUPA 2050</h1>
-            <p>INTEGRATED DIGITAL ARCHITECT | INNOVATOR</p>
-            <a href="#" class="glow-btn">VIEW NEURAL PROJECTS</a>
-        </div>
+        <h1 class="glitch-text">SAKTISWARUPA</h1>
+        <p style="margin-bottom: 30px; color: #888;">NEXT-GEN DEVELOPER & ENTREPRENEUR</p>
+        <a href="#" class="neon-btn">ENTER SYSTEM</a>
     </div>
 
     <script>
-        function startTransition() {
-            // A. Old UI elements select karein
-            const oldUI = document.getElementById('old-ui');
-            const futureUI = document.getElementById('future-ui');
+        async function disintegrate() {
+            const container = document.getElementById('old-ui-container');
+            const target = document.getElementById('capture-target');
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // 1. Old UI ki "Photo" lo (html2canvas)
+            const snapshot = await html2canvas(target);
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const rect = target.getBoundingClientRect();
+            const data = snapshot.getContext('2d').getImageData(0, 0, snapshot.width, snapshot.height).data;
+            
+            // 2. Hide real Old UI
+            container.style.opacity = '0';
+            setTimeout(() => container.style.display = 'none', 500);
 
-            // B. Wind vanish animation trigger karein
-            oldUI.classList.add('vanish-out');
+            // 3. Create Particles from Image Data
+            let particles = [];
+            for (let y = 0; y < snapshot.height; y += 4) {
+                for (let x = 0; x < snapshot.width; x += 4) {
+                    const i = (y * snapshot.width + x) * 4;
+                    if (data[i + 3] > 0) { // Sirf wahi pixels jo transparent nahi hain
+                        particles.push({
+                            x: x + rect.left,
+                            y: y + rect.top,
+                            vx: (Math.random() - 0.5) * 10 + 5, // Right side hawa (wind)
+                            vy: (Math.random() - 0.5) * 10 - 2,
+                            color: `rgba(${data[i]},${data[i+1]},${data[i+2]},${data[i+3]})`,
+                            size: Math.random() * 3
+                        });
+                    }
+                }
+            }
 
-            // C. Animation khatam hone ka wait karein (1.5s), fir future UI dikhayein
-            setTimeout(() => {
-                oldUI.style.display = 'none'; // Old UI ko completely remove karein
-                futureUI.classList.add('visible'); // Future UI fade in
-                document.body.style.overflow = 'auto'; // Scrolling enable karein
-            }, 1500); // 1.5 seconds delay (matches animation duration)
+            // 4. Animation Loop
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vx += 0.2; // Wind force
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(p.x, p.y, p.size, p.size);
+                });
+
+                if (particles[0].x < canvas.width + 200) {
+                    requestAnimationFrame(animate);
+                } else {
+                    document.getElementById('future-ui').classList.add('show');
+                }
+            }
+            animate();
         }
     </script>
 </body>
 </html>
+
