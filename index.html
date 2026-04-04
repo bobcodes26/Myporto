@@ -3,176 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saktiswarupa - Particle Dissolve Portfolio</title>
+    <title>Saktiswarupa - Fast Particle Portfolio</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
         body, html { height: 100%; overflow: hidden; background: #000; }
 
-        /* --- OLD UI (Windows Style) --- */
-        #old-ui-container {
-            position: fixed;
-            inset: 0;
-            background: #008080;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
+        /* --- OLD UI --- */
+        #old-ui {
+            position: fixed; inset: 0; background: #008080;
+            display: flex; justify-content: center; align-items: center; z-index: 10;
         }
+        .win98 { background: #c0c0c0; border: 2px solid; border-color: #fff #0a0a0a #0a0a0a #fff; width: 320px; padding: 2px; }
+        .win98-header { background: #000080; color: white; padding: 3px 10px; font-size: 12px; }
+        .win98-content { padding: 25px; text-align: center; color: #000; }
+        .btn-old { margin-top: 10px; padding: 5px 15px; cursor: pointer; background: #c0c0c0; border: 2px solid; border-color: #fff #0a0a0a #0a0a0a #fff; font-weight: bold; }
 
-        .win98-box {
-            background: #c0c0c0;
-            border: 2px solid;
-            border-color: #fff #0a0a0a #0a0a0a #fff;
-            width: 350px;
-            padding: 2px;
-        }
+        /* --- CANVAS --- */
+        #canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 11; }
 
-        .win98-title {
-            background: linear-gradient(90deg, #000080, #1084d0);
-            color: white;
-            padding: 3px 10px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .win98-body {
-            padding: 30px;
-            text-align: center;
-            color: #000;
-        }
-
-        .win98-btn {
-            margin-top: 15px;
-            padding: 8px 20px;
-            background: #c0c0c0;
-            border: 2px solid;
-            border-color: #fff #0a0a0a #0a0a0a #fff;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        /* --- CANVAS FOR PARTICLES --- */
-        #particle-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            pointer-events: none;
-            z-index: 11;
-        }
-
-        /* --- FUTURE UI (2050) --- */
+        /* --- FUTURE UI --- */
         #future-ui {
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(circle, #0d1b2a 0%, #000 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: #00f2ff;
-            opacity: 0;
-            transition: opacity 2s ease;
-            z-index: 1;
+            position: fixed; inset: 0; background: #02060c;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: #64ffda; opacity: 0; transition: opacity 1.5s ease; z-index: 1;
         }
-
-        #future-ui.show { opacity: 1; }
-
-        .glitch-text {
-            font-size: 3.5rem;
-            letter-spacing: 5px;
-            text-shadow: 0 0 15px #00f2ff;
-            margin-bottom: 20px;
-        }
-
-        .neon-btn {
-            border: 1px solid #00f2ff;
-            padding: 10px 30px;
-            color: #00f2ff;
-            text-decoration: none;
-            box-shadow: 0 0 10px #00f2ff;
-            transition: 0.3s;
-        }
-
-        .neon-btn:hover { background: #00f2ff; color: #000; }
+        #future-ui.active { opacity: 1; }
+        .neon-text { font-size: 3rem; text-shadow: 0 0 10px #64ffda; margin-bottom: 15px; font-family: sans-serif; }
     </style>
 </head>
 <body>
 
-    <div id="old-ui-container">
-        <div class="win98-box" id="capture-target">
-            <div class="win98-title">System Update</div>
-            <div class="win98-body">
-                <p>Old interface detected.</p>
-                <button class="win98-btn" onclick="disintegrate()">EVOLVE TO 2050</button>
+    <div id="old-ui">
+        <div class="win98" id="box">
+            <div class="win98-header">System.exe</div>
+            <div class="win98-content">
+                <p>Execute Evolution?</p>
+                <button class="btn-old" onclick="blowAway()">YES</button>
             </div>
         </div>
     </div>
 
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="canvas"></canvas>
 
     <div id="future-ui">
-        <h1 class="glitch-text">SAKTISWARUPA</h1>
-        <p style="margin-bottom: 30px; color: #888;">NEXT-GEN DEVELOPER & ENTREPRENEUR</p>
-        <a href="#" class="neon-btn">ENTER SYSTEM</a>
+        <h1 class="neon-text">SAKTISWARUPA</h1>
+        <p style="color: #8892b0;">VERSION 2050.0.1</p>
     </div>
 
     <script>
-        async function disintegrate() {
-            const container = document.getElementById('old-ui-container');
-            const target = document.getElementById('capture-target');
-            const canvas = document.getElementById('particle-canvas');
-            const ctx = canvas.getContext('2d');
+        async function blowAway() {
+            const box = document.getElementById('box');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d', { alpha: false }); // Performance boost
             
-            // 1. Old UI ki "Photo" lo (html2canvas)
-            const snapshot = await html2canvas(target);
+            const snapshot = await html2canvas(box);
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             
-            const rect = target.getBoundingClientRect();
-            const data = snapshot.getContext('2d').getImageData(0, 0, snapshot.width, snapshot.height).data;
+            const rect = box.getBoundingClientRect();
+            const imgData = snapshot.getContext('2d').getImageData(0, 0, snapshot.width, snapshot.height).data;
             
-            // 2. Hide real Old UI
-            container.style.opacity = '0';
-            setTimeout(() => container.style.display = 'none', 500);
+            document.getElementById('old-ui').style.display = 'none';
 
-            // 3. Create Particles from Image Data
             let particles = [];
-            for (let y = 0; y < snapshot.height; y += 4) {
-                for (let x = 0; x < snapshot.width; x += 4) {
+            // OPTIMIZATION: 'step' ko 6 rakha hai taaki kam particles bane par effect waisa hi rahe
+            const step = 6; 
+
+            for (let y = 0; y < snapshot.height; y += step) {
+                for (let x = 0; x < snapshot.width; x += step) {
                     const i = (y * snapshot.width + x) * 4;
-                    if (data[i + 3] > 0) { // Sirf wahi pixels jo transparent nahi hain
+                    if (imgData[i + 3] > 0) {
                         particles.push({
                             x: x + rect.left,
                             y: y + rect.top,
-                            vx: (Math.random() - 0.5) * 10 + 5, // Right side hawa (wind)
-                            vy: (Math.random() - 0.5) * 10 - 2,
-                            color: `rgba(${data[i]},${data[i+1]},${data[i+2]},${data[i+3]})`,
-                            size: Math.random() * 3
+                            vx: Math.random() * 15 + 5, // Fast wind speed
+                            vy: (Math.random() - 0.5) * 8,
+                            color: `rgb(${imgData[i]},${imgData[i+1]},${imgData[i+2]})`,
+                            size: Math.random() * 4 + 1
                         });
                     }
                 }
             }
 
-            // 4. Animation Loop
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => {
+            function frame() {
+                ctx.fillStyle = "#000"; // Black background for canvas during animation
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                let active = false;
+                for (let p of particles) {
                     p.x += p.vx;
                     p.y += p.vy;
-                    p.vx += 0.2; // Wind force
-                    ctx.fillStyle = p.color;
-                    ctx.fillRect(p.x, p.y, p.size, p.size);
-                });
+                    p.vx += 0.5; // Acceleration
+                    
+                    if (p.x < canvas.width) {
+                        ctx.fillStyle = p.color;
+                        ctx.fillRect(p.x, p.y, p.size, p.size);
+                        active = true;
+                    }
+                }
 
-                if (particles[0].x < canvas.width + 200) {
-                    requestAnimationFrame(animate);
+                if (active) {
+                    requestAnimationFrame(frame);
                 } else {
-                    document.getElementById('future-ui').classList.add('show');
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    document.getElementById('future-ui').classList.add('active');
                 }
             }
-            animate();
+            frame();
         }
     </script>
 </body>
 </html>
-
