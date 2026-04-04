@@ -3,92 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saktiswarupa - Ultra Fast Portfolio</title>
+    <title>BABU - Ultra Fast Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', monospace; }
-        body, html { height: 100%; overflow: hidden; background: #000; }
+        body, html { height: 100%; overflow: hidden; background: #000; color: #fff; }
 
         /* --- OLD UI --- */
         #old-ui {
             position: fixed; inset: 0; background: #008080;
             display: flex; justify-content: center; align-items: center; z-index: 10;
-            transition: all 0.8s cubic-bezier(0.45, 0.05, 0.55, 0.95);
         }
+        .win98 { background: #c0c0c0; border: 2px solid; border-color: #fff #0a0a0a #0a0a0a #fff; width: 280px; padding: 2px; box-shadow: 4px 4px 0 rgba(0,0,0,0.3); }
+        .win98-header { background: #000080; color: white; padding: 4px 10px; font-size: 12px; font-weight: bold; text-align: left; }
+        .win98-body { padding: 25px; text-align: center; color: #000; }
+        .btn-old { margin-top: 15px; padding: 6px 20px; cursor: pointer; background: #c0c0c0; border: 2px solid; border-color: #fff #0a0a0a #0a0a0a #fff; font-weight: bold; }
 
-        /* Wind Animation Effect */
-        .wind-away {
-            transform: translateX(150vw) skewX(-20deg) scale(0.5);
-            opacity: 0;
-            filter: blur(10px);
-            pointer-events: none;
-        }
-
-        .win98 { 
-            background: #c0c0c0; border: 2px solid; border-color: #fff #0a0a0a #0a0a0a #fff; 
-            width: 300px; padding: 2px; box-shadow: 5px 5px 0 rgba(0,0,0,0.3);
-        }
-        .win98-header { background: #000080; color: white; padding: 4px 10px; font-size: 12px; font-weight: bold; }
-        .win98-body { padding: 30px; text-align: center; color: #000; }
-        .btn-old { 
-            margin-top: 15px; padding: 8px 20px; cursor: pointer; background: #c0c0c0; 
-            border: 2px solid; border-color: #fff #0a0a0a #0a0a0a #fff; font-weight: bold;
-        }
+        /* --- CANVAS --- */
+        #canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 11; display: none; }
 
         /* --- FUTURE UI (2050) --- */
         #future-ui {
             position: fixed; inset: 0; background: #020617;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            color: #22d3ee; opacity: 0; transform: scale(1.1);
-            transition: all 1s ease-out; z-index: 1;
+            color: #22d3ee; opacity: 0; pointer-events: none; z-index: 1;
+            transition: opacity 0.8s ease-out;
+            overflow-y: auto; /* Scroll allow for projects */
+            padding: 40px 20px;
         }
+        #future-ui.active { opacity: 1; pointer-events: auto; }
 
-        #future-ui.active { opacity: 1; transform: scale(1); }
-
-        .neon-title { 
-            font-size: 2.5rem; text-transform: uppercase; letter-spacing: 4px;
-            text-shadow: 0 0 15px #22d3ee; margin-bottom: 10px; font-family: sans-serif;
-        }
+        .neon-title { font-size: 3rem; text-transform: uppercase; letter-spacing: 6px; text-shadow: 0 0 15px #22d3ee; margin-bottom: 30px; font-family: sans-serif; }
         
-        /* Chota Pulse Animation */
-        .pulse {
-            width: 10px; height: 10px; background: #22d3ee; border-radius: 50%;
-            margin-bottom: 20px; box-shadow: 0 0 10px #22d3ee;
-            animation: pulse-kf 1.5s infinite;
+        /* Projects Styling */
+        .projects-container { width: 100%; max-width: 600px; }
+        .project-card {
+            background: rgba(34, 211, 238, 0.05);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            padding: 20px; margin-bottom: 15px;
+            border-radius: 4px;
+            transition: 0.3s;
         }
-        @keyframes pulse-kf { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
+        .project-card:hover { background: rgba(34, 211, 238, 0.1); border-color: rgba(34, 211, 238, 0.5); }
+        .project-title { color: #22d3ee; font-size: 1.2rem; margin-bottom: 5px; font-weight: bold; }
+        .project-desc { color: #94a3b8; font-size: 0.9rem; }
 
     </style>
 </head>
 <body>
 
     <div id="old-ui">
-        <div class="win98">
-            <div class="win98-header">Migration_Tool.exe</div>
+        <div class="win98" id="box">
+            <div class="win98-header">System_Migrate.exe</div>
             <div class="win98-body">
-                <p style="font-size: 14px;">Old OS Detected.<br>Upgrade to 2050?</p>
-                <button class="btn-old" onclick="triggerTransition()">UPGRADE</button>
+                <p style="font-size: 14px;">BABU_OS detected.<br>Initialize Evolution?</p>
+                <button class="btn-old" onclick="blowAway()">RUN</button>
             </div>
         </div>
     </div>
 
+    <canvas id="canvas"></canvas>
+
     <div id="future-ui">
-        <div class="pulse"></div>
-        <h1 class="neon-title">Saktiswarupa</h1>
-        <p style="color: #64748b; font-size: 0.9rem; letter-spacing: 2px;">NEURAL INTERFACE READY</p>
+        <h1 class="neon-title">BABU</h1>
+        <div class="projects-container">
+            <div class="project-card">
+                <div class="project-title">Project Alpha (Firebase)</div>
+                <div class="project-desc">Real-time data synchronization system.</div>
+            </div>
+            <div class="project-card">
+                <div class="project-title">Project Beta (UI/UX)</div>
+                <div class="project-desc">Next-gen interface design prototype.</div>
+            </div>
+            <div class="project-card">
+                <div class="project-title">Project Gamma (E-com)</div>
+                <div class="project-desc">Decentralized retail solution 2050.</div>
+            </div>
+        </div>
     </div>
 
     <script>
-        function triggerTransition() {
-            const oldUI = document.getElementById('old-ui');
-            const futureUI = document.getElementById('future-ui');
+        async function blowAway() {
+            const box = document.getElementById('box');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d', { alpha: false }); // High performance
+            
+            // 1. Snapshot and hide Old UI immediately
+            const snapshot = await html2canvas(box, { logging: false, useCORS: true });
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            canvas.style.display = 'block';
+            
+            const rect = box.getBoundingClientRect();
+            const imgData = snapshot.getContext('2d').getImageData(0, 0, snapshot.width, snapshot.height).data;
+            
+            document.getElementById('old-ui').style.display = 'none';
 
-            // 1. Start Wind Effect (Fast & Smooth)
-            oldUI.classList.add('wind-away');
+            let particles = [];
+            // OPTIMIZATION: STEP badha diya taaki particles bahut kam bane (Very Smooth)
+            const step = 8; 
 
-            // 2. Show Future UI almost immediately
-            setTimeout(() => {
-                futureUI.classList.add('active');
-            }, 400); // 0.4 second delay only
+            for (let y = 0; y < snapshot.height; y += step) {
+                for (let x = 0; x < snapshot.width; x += step) {
+                    const i = (y * snapshot.width + x) * 4;
+                    if (imgData[i + 3] > 128) { // Only semi-transparent pixels
+                        particles.push({
+                            x: x + rect.left,
+                            y: y + rect.top,
+                            vx: Math.random() * 20 + 10, // Fast wind speed
+                            vy: (Math.random() - 0.5) * 10,
+                            color: `rgb(${imgData[i]},${imgData[i+1]},${imgData[i+2]})`,
+                            size: Math.random() * 5 + 2 // Slightly larger for visibility
+                        });
+                    }
+                }
+            }
+
+            // Clean up memory
+            delete snapshot;
+
+            function frame() {
+                ctx.fillStyle = "#000"; // Black bg during animation
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                let active = false;
+                for (let i = 0; i < particles.length; i++) {
+                    let p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vx += 1; // Faster acceleration
+                    
+                    if (p.x < canvas.width + 50) {
+                        ctx.fillStyle = p.color;
+                        ctx.fillRect(p.x, p.y, p.size, p.size);
+                        active = true;
+                    }
+                }
+
+                if (active) {
+                    requestAnimationFrame(frame);
+                } else {
+                    canvas.style.display = 'none';
+                    document.getElementById('future-ui').classList.add('active');
+                    particles = []; // Clear memory
+                }
+            }
+            frame();
         }
     </script>
 </body>
