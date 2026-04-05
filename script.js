@@ -1,101 +1,39 @@
-// 1. Gravity Transition Logic
-function startEvolution() {
-    const loaderCard = document.getElementById('loader-card');
-    const loader = document.getElementById('loader');
-    const main = document.getElementById('main-content');
+const GITHUB_USERNAME = 'bobcodes26';
+const repoGrid = document.getElementById('repo-grid');
+const loader = document.getElementById('loader');
 
-    loaderCard.classList.add('fall');
-    
-    setTimeout(() => {
-        loader.style.opacity = '0';
-        setTimeout(() => {
-            loader.style.display = 'none';
-            main.classList.remove('opacity-0');
-            startTyping();
-        }, 500);
-    }, 600);
-}
+async function fetchRepos() {
+    try {
+        const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=10`);
+        const data = await response.json();
 
-// 2. Typing Animation
-const texts = ["Automation Developer", "AI Tool Builder", "System Architect"];
-let count = 0;
-let index = 0;
-let currentText = "";
-let letter = "";
+        // Filter out forks and get top 6
+        const repos = data
+            .filter(repo => !repo.fork)
+            .slice(0, 6);
 
-function startTyping() {
-    (function type() {
-        if (count === texts.length) count = 0;
-        currentText = texts[count];
-        letter = currentText.slice(0, ++index);
-
-        document.getElementById('typing').textContent = letter;
-        if (letter.length === currentText.length) {
-            count++;
-            index = 0;
-            setTimeout(type, 2000);
-        } else {
-            setTimeout(type, 100);
-        }
-    }());
-}
-
-// 3. Lightweight Particle System
-const canvas = document.getElementById('particleCanvas');
-const ctx = canvas.getContext('2d');
-let particles = [];
-
-function initParticles() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    for (let i = 0; i < 60; i++) {
-        particles.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            size: Math.random() * 2,
-            speedX: (Math.random() - 0.5) * 0.5,
-            speedY: (Math.random() - 0.5) * 0.5
-        });
+        renderRepos(repos);
+    } catch (error) {
+        repoGrid.innerHTML = `<p style="color:red; text-align:center;">Error connecting to Neural Link. Please refresh.</p>`;
+        console.error('Fetch error:', error);
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
-function animateParticles() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => {
-        p.x += p.speedX;
-        p.y += p.speedY;
-        if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
-        
-        ctx.fillStyle = '#22d3ee';
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-    });
-    requestAnimationFrame(animateParticles);
+function renderRepos(repos) {
+    repoGrid.innerHTML = repos.map(repo => `
+        <div class="repo-card">
+            <h3>${repo.name.toUpperCase()}</h3>
+            <p>${repo.description || 'No description available for this neural module.'}</p>
+            <div class="repo-meta">
+                <span>⚡ ${repo.language || 'Plain Text'}</span>
+                <span>⭐ ${repo.stargazers_count}</span>
+            </div>
+            <a href="${repo.html_url}" target="_blank" style="display:block; margin-top:15px; color:white; font-size:0.7rem; text-decoration:none; border-bottom:1px solid #22d3ee; width:fit-content;">OPEN_REPO ></a>
+        </div>
+    `).join('');
 }
 
-window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-});
-
-initParticles();
-animateParticles();
-
-// 4. Project Filter
-function filterProjects(category) {
-    const cards = document.querySelectorAll('.project-card');
-    const btns = document.querySelectorAll('.filter-btn');
-    
-    btns.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
-
-    cards.forEach(card => {
-        if (category === 'all' || card.dataset.category === category) {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
-    });
-}
+// Initialize fetch
+fetchRepos();
