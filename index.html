@@ -3,42 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bobcodes | 2030 Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Bobcodes | 2030 Neural Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #020617;
+            color: #e2e8f0;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+        }
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+        
+        /* Particle Background */
+        #bg-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.4; }
+
+        /* Neon Glows */
+        .neon-text { color: #22d3ee; text-shadow: 0 0 15px rgba(34, 211, 238, 0.8); }
+        .neon-border { border: 1px solid rgba(34, 211, 238, 0.3); box-shadow: 0 0 15px rgba(34, 211, 238, 0.1); }
+        .neon-border:hover { border-color: #22d3ee; box-shadow: 0 0 20px rgba(34, 211, 238, 0.4); }
+
+        /* Animations */
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .scanline {
+            width: 100%; height: 2px; background: rgba(34, 211, 238, 0.2);
+            position: absolute; animation: scan 4s linear infinite;
+        }
+        @keyframes scan { from { top: 0; } to { top: 100%; } }
+
+        .loader-spin {
+            border: 3px solid rgba(34, 211, 238, 0.1);
+            border-top: 3px solid #22d3ee;
+            border-radius: 50%; width: 40px; height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
 </head>
 <body>
 
-    <div class="stars"></div>
+    <canvas id="bg-canvas"></canvas>
+    <div class="scanline"></div>
 
-    <main class="container">
-        <section class="hero">
-            <h1 class="glow-text">BOBCODES</h1>
-            <p class="subtitle">Automation Developer | AI Tool Builder</p>
-            <div class="status-bar">SYSTEM STATUS: <span class="online">ONLINE</span></div>
+    <div class="max-w-5xl mx-auto px-6">
+        <section class="h-screen flex flex-col justify-center items-center text-center">
+            <h1 class="orbitron text-5xl md:text-7xl neon-text mb-4 tracking-tighter">BOBCODES</h1>
+            <p class="text-xl md:text-2xl font-light tracking-[0.3em] text-cyan-100/60 mb-8 uppercase">Automation Architect</p>
+            <div class="flex gap-4">
+                <a href="#projects" class="px-6 py-2 border border-cyan-500 text-cyan-400 hover:bg-cyan-500/10 transition">PROJECTS</a>
+                <a href="mailto:bobcodes26@gmail.com" class="px-6 py-2 bg-cyan-500 text-slate-950 font-bold hover:shadow-[0_0_20px_#22d3ee] transition">CONTACT</a>
+            </div>
         </section>
 
-        <section id="projects">
-            <h2 class="section-title">PROJECT_ARCHIVE</h2>
-            
-            <div id="loader" class="loader">
-                <div class="spinner"></div>
-                <p>Fetching Data from GitHub Neural Link...</p>
+        <section id="projects" class="pb-20">
+            <h2 class="orbitron text-2xl text-cyan-400 mb-10 flex items-center gap-4">
+                <span class="w-12 h-[1px] bg-cyan-500"></span> 
+                NEURAL_REPOS 
+            </h2>
+
+            <div id="loader" class="flex flex-col items-center py-20">
+                <div class="loader-spin"></div>
+                <p class="mt-4 text-cyan-500/50 animate-pulse font-mono uppercase text-xs tracking-widest">Accessing GitHub API...</p>
             </div>
 
-            <div id="repo-grid" class="repo-grid"></div>
+            <div id="repo-grid" class="grid md:grid-cols-2 gap-6">
+                </div>
         </section>
+    </div>
 
-        <section class="contact">
-            <h2 class="section-title">ESTABLISH_CONNECTION</h2>
-            <a href="mailto:bobcodes26@gmail.com" class="email-btn">bobcodes26@gmail.com</a>
-        </section>
+    <script>
+        // 1. Fixed Particle System (Lightweight)
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-        <footer>
-            <p>Building systems that still work in 2030.</p>
-        </footer>
-    </main>
+        let dots = Array.from({length: 50}, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5
+        }));
 
-    <script src="script.js"></script>
+        function draw() {
+            ctx.clearRect(0,0, canvas.width, canvas.height);
+            ctx.fillStyle = '#22d3ee';
+            dots.forEach(d => {
+                d.x += d.vx; d.y += d.vy;
+                if(d.x < 0 || d.x > canvas.width) d.vx *= -1;
+                if(d.y < 0 || d.y > canvas.height) d.vy *= -1;
+                ctx.beginPath(); ctx.arc(d.x, d.y, 1, 0, Math.PI*2); ctx.fill();
+            });
+            requestAnimationFrame(draw);
+        }
+        draw();
+
+        // 2. Fixed GitHub Fetcher
+        const GITHUB_USER = 'bobcodes26';
+        
+        async function loadRepos() {
+            const grid = document.getElementById('repo-grid');
+            const loader = document.getElementById('loader');
+            
+            try {
+                const res = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=10`);
+                if(!res.ok) throw new Error('API Limit');
+                const repos = await res.json();
+
+                loader.style.display = 'none';
+                grid.innerHTML = repos.filter(r => !r.fork).slice(0, 6).map(repo => `
+                    <div class="neon-border bg-slate-900/40 p-6 rounded-sm backdrop-blur-md transition-all duration-300 group">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="orbitron text-lg text-white group-hover:text-cyan-400 transition">${repo.name.toUpperCase()}</h3>
+                            <span class="text-[10px] text-cyan-500 border border-cyan-500/30 px-2 py-0.5">${repo.language || 'Code'}</span>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-6 h-10 overflow-hidden line-clamp-2">
+                            ${repo.description || 'No neural description found for this encrypted module.'}
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div class="text-xs text-slate-500">⭐ ${repo.stargazers_count}</div>
+                            <a href="${repo.html_url}" target="_blank" class="text-xs text-cyan-400 hover:underline">SOURCE_CODE ></a>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                loader.innerHTML = `<p class="text-red-400 font-mono text-xs">ERR: CONNECTION_TIMEOUT. REFRESH PAGE.</p>`;
+            }
+        }
+
+        loadRepos();
+    </script>
 </body>
 </html>
