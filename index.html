@@ -1,119 +1,109 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Babu | Vision 2030</title>
+    <title>Babu | Neural Architect</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { background: #020617; color: #f8fafc; font-family: 'Rajdhani', sans-serif; }
-        .orbitron { font-family: 'Orbitron', sans-serif; }
+        :root { --neon: #00f2ff; --bg: #030712; }
+        body { background: var(--bg); color: #f8fafc; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
+        .syncopate { font-family: 'Syncopate', sans-serif; }
         
-        /* Cyber Grid Background */
-        .grid-bg {
-            background-image: linear-gradient(to right, rgba(34, 211, 238, 0.05) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(34, 211, 238, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
+        /* Animated Cyber Mesh Background */
+        .mesh {
+            position: fixed; inset: 0; z-index: -1;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(0, 242, 255, 0.05) 0%, transparent 50%),
+                linear-gradient(rgba(0, 242, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+            animation: meshMove 20s linear infinite;
         }
+        @keyframes meshMove { from { background-position: 0% 0%, 0 0, 0 0; } to { background-position: 0% 0%, 40px 40px, 40px 40px; } }
 
-        .neon-glow { text-shadow: 0 0 10px rgba(34, 211, 238, 0.8); }
-        .glass-card {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(34, 211, 238, 0.2);
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
+        .glow-box {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .glass-card:hover {
-            border-color: #22d3ee;
-            box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
-            transform: translateY(-5px);
+        .glow-box:hover {
+            border-color: var(--neon);
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
+            transform: translateY(-8px) scale(1.02);
         }
+        .neon-text { color: var(--neon); text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); }
     </style>
 </head>
-<body class="grid-bg min-h-screen">
+<body>
 
-    <header class="h-[70vh] flex flex-col justify-center items-center text-center px-4">
-        <div class="inline-block px-3 py-1 border border-cyan-500/30 rounded-full text-xs tracking-widest text-cyan-400 mb-6 bg-cyan-500/5">
-            ESTABLISHED 2026 • VERSION 2.0
-        </div>
-        <h1 class="orbitron text-6xl md:text-8xl font-bold neon-glow mb-4 tracking-tighter">BABU</h1>
-        <p class="text-lg md:text-xl text-slate-400 max-w-lg">Automation Developer & AI System Builder. Architecting the future of rural digital ecosystems.</p>
-    </header>
+    <div class="mesh"></div>
 
-    <main class="max-w-6xl mx-auto px-6 pb-20">
-        
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-20">
-            <div class="glass-card p-4 text-center">
-                <div class="text-cyan-400 orbitron text-xl">90%</div>
-                <div class="text-xs uppercase opacity-50">Logic Build</div>
-            </div>
-            <div class="glass-card p-4 text-center">
-                <div class="text-cyan-400 orbitron text-xl">24/7</div>
-                <div class="text-xs uppercase opacity-50">Automation</div>
-            </div>
-            <div class="glass-card p-4 text-center">
-                <div class="text-cyan-400 orbitron text-xl">10+</div>
-                <div class="text-xs uppercase opacity-50">AI Prompts</div>
-            </div>
-            <div class="glass-card p-4 text-center">
-                <div class="text-cyan-400 orbitron text-xl">ODISHA</div>
-                <div class="text-xs uppercase opacity-50">Local Root</div>
+    <nav class="fixed top-0 w-full z-50 border-b border-white/5 backdrop-blur-xl bg-black/20">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <span class="syncopate font-bold text-sm tracking-tighter neon-text">BABU_SYSTEMS</span>
+            <div class="flex gap-8 text-[10px] tracking-[0.3em] uppercase font-bold text-white/50">
+                <a href="#work" class="hover:text-cyan-400 transition">Work</a>
+                <a href="#vision" class="hover:text-cyan-400 transition">Vision</a>
+                <a href="mailto:bobcodes26@gmail.com" class="hover:text-cyan-400 transition">Link</a>
             </div>
         </div>
+    </nav>
 
-        <h2 class="orbitron text-2xl mb-10 text-cyan-400 flex items-center gap-3">
-            <span class="w-8 h-1 bg-cyan-500"></span> ACTIVE_MODULES
+    <section class="min-h-screen flex flex-col justify-center items-center px-6 text-center">
+        <p class="text-xs tracking-[0.5em] text-cyan-400/60 mb-4 uppercase font-bold">Autonomous System Architect</p>
+        <h1 class="syncopate text-6xl md:text-9xl font-bold tracking-tighter leading-none mb-6">
+            BABU<span class="neon-text">.</span>
+        </h1>
+        <p class="max-w-xl text-lg text-slate-400 font-light leading-relaxed">
+            Digitizing the rural landscape through <span class="text-white font-medium">AI Automation</span> and <span class="text-white font-medium">Cloud Infrastructure</span>. Building for the next decade.
+        </p>
+        <div class="mt-12 animate-bounce opacity-20">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
+    </section>
+
+    <section id="work" class="max-w-7xl mx-auto px-6 py-32">
+        <h2 class="syncopate text-2xl mb-16 flex items-center gap-6">
+            <span class="h-px w-20 bg-cyan-500/30"></span> 
+            ACTIVE_MODULES
         </h2>
-        
-        <div class="grid md:grid-cols-3 gap-6">
-            <div class="glass-card p-6 flex flex-col">
-                <div class="flex justify-between mb-4">
-                    <span class="text-[10px] bg-cyan-500/10 text-cyan-400 px-2 py-1 rounded">SYSTEM</span>
-                    <span class="text-xs opacity-40 italic">#001</span>
-                </div>
-                <h3 class="orbitron text-lg mb-2">BLUEBOT</h3>
-                <p class="text-sm text-slate-400 mb-6 flex-grow">Smart Gas Agency Management. Digitizing delivery, tracking, and consumer databases for local agencies.</p>
-                <div class="flex gap-4 items-center">
-                    <span class="text-xs font-bold text-cyan-400">NODE.JS / FIREBASE</span>
+
+        <div class="grid md:grid-cols-2 gap-12">
+            <div class="glow-box p-8 rounded-2xl relative overflow-hidden group">
+                <div class="absolute -right-10 -top-10 text-8xl font-bold text-white/5 opacity-10 group-hover:opacity-20 transition">01</div>
+                <h3 class="syncopate text-xl mb-4 text-cyan-400">BLUEBOT ENGINE</h3>
+                <p class="text-slate-400 mb-8 leading-relaxed">A specialized LPG management ecosystem. Handling consumer analytics, real-time inventory, and automated delivery logs.</p>
+                <div class="flex gap-3">
+                    <span class="text-[10px] font-bold border border-white/10 px-3 py-1 rounded-full uppercase">Firebase</span>
+                    <span class="text-[10px] font-bold border border-white/10 px-3 py-1 rounded-full uppercase">React_Core</span>
                 </div>
             </div>
 
-            <div class="glass-card p-6 flex flex-col">
-                <div class="flex justify-between mb-4">
-                    <span class="text-[10px] bg-cyan-500/10 text-cyan-400 px-2 py-1 rounded">AUTOMATION</span>
-                    <span class="text-xs opacity-40 italic">#002</span>
-                </div>
-                <h3 class="orbitron text-lg mb-2">TELE-AFFILIATE</h3>
-                <p class="text-sm text-slate-400 mb-6 flex-grow">Automated deal posting bot. Connects Google Sheets API to Telegram for seamless affiliate marketing.</p>
-                <div class="flex gap-4 items-center">
-                    <span class="text-xs font-bold text-cyan-400">PYTHON / API</span>
-                </div>
-            </div>
-
-            <div class="glass-card p-6 flex flex-col">
-                <div class="flex justify-between mb-4">
-                    <span class="text-[10px] bg-cyan-500/10 text-cyan-400 px-2 py-1 rounded">AI VOICE</span>
-                    <span class="text-xs opacity-40 italic">#003</span>
-                </div>
-                <h3 class="orbitron text-lg mb-2">VOICE_ASSISTANT</h3>
-                <p class="text-sm text-slate-400 mb-6 flex-grow">Speech-to-text integration for controlling utility tasks. Building hands-free tools for developers.</p>
-                <div class="flex gap-4 items-center">
-                    <span class="text-xs font-bold text-cyan-400">JS / PYTHON</span>
+            <div class="glow-box p-8 rounded-2xl relative overflow-hidden group">
+                <div class="absolute -right-10 -top-10 text-8xl font-bold text-white/5 opacity-10 group-hover:opacity-20 transition">02</div>
+                <h3 class="syncopate text-xl mb-4 text-cyan-400">TELE_SYNC</h3>
+                <p class="text-slate-400 mb-8 leading-relaxed">High-speed affiliate automation. Bridges Google Sheets logic with Telegram API to deploy instant market deals.</p>
+                <div class="flex gap-3">
+                    <span class="text-[10px] font-bold border border-white/10 px-3 py-1 rounded-full uppercase">Python</span>
+                    <span class="text-[10px] font-bold border border-white/10 px-3 py-1 rounded-full uppercase">Automation</span>
                 </div>
             </div>
         </div>
+    </section>
 
-        <section class="mt-32 text-center py-20 border-t border-cyan-500/10">
-            <h2 class="orbitron text-3xl mb-4">CONTACT_NEURAL_LINK</h2>
-            <p class="text-slate-500 mb-8">Building the next digital era of rural Odisha.</p>
-            <a href="mailto:bobcodes26@gmail.com" class="inline-block bg-cyan-500 text-slate-950 font-bold px-10 py-4 hover:shadow-[0_0_30px_#22d3ee] transition uppercase tracking-widest">Send Transmission</a>
-        </section>
+    <section id="vision" class="py-32 border-t border-white/5">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="syncopate text-4xl md:text-6xl mb-12 opacity-80 italic">BUILD_THE_FUTURE</h2>
+            <p class="text-slate-500 mb-16 tracking-widest uppercase text-sm">Now recruiting ideas for 2030 rural development.</p>
+            <a href="mailto:bobcodes26@gmail.com" class="syncopate border-b-2 border-cyan-500 pb-2 text-xl hover:text-cyan-400 transition">CONTACT_PORTAL</a>
+        </div>
+    </section>
 
-    </main>
-
-    <footer class="text-center py-10 opacity-30 text-xs tracking-widest uppercase">
-        Systems built for 2030 • Designed by Babu
+    <footer class="py-12 text-center text-[10px] tracking-[0.5em] text-white/20">
+        © 2026 BABU_SYTEMS // ODISHA_CORE
     </footer>
 
 </body>
