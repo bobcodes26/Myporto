@@ -3,108 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Babu | Neural Architect</title>
+    <title>Bobcodes | 2030 Developer Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root { --neon: #00f2ff; --bg: #030712; }
-        body { background: var(--bg); color: #f8fafc; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
-        .syncopate { font-family: 'Syncopate', sans-serif; }
-        
-        /* Animated Cyber Mesh Background */
-        .mesh {
-            position: fixed; inset: 0; z-index: -1;
-            background: 
-                radial-gradient(circle at 50% 50%, rgba(0, 242, 255, 0.05) 0%, transparent 50%),
-                linear-gradient(rgba(0, 242, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 242, 255, 0.02) 1px, transparent 1px);
-            background-size: 100% 100%, 40px 40px, 40px 40px;
-            animation: meshMove 20s linear infinite;
-        }
-        @keyframes meshMove { from { background-position: 0% 0%, 0 0, 0 0; } to { background-position: 0% 0%, 40px 40px, 40px 40px; } }
-
-        .glow-box {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(0, 242, 255, 0.2);
-            backdrop-filter: blur(12px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .glow-box:hover {
-            border-color: var(--neon);
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
-            transform: translateY(-8px) scale(1.02);
-        }
-        .neon-text { color: var(--neon); text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="bg-[#020617] text-slate-200 selection:bg-cyan-500 selection:text-white overflow-x-hidden">
 
-    <div class="mesh"></div>
+    <div id="loader" class="fixed inset-0 z-[100] bg-[#008080] flex items-center justify-center transition-all duration-700">
+        <div id="loader-card" class="bg-[#c0c0c0] border-2 border-white border-r-black border-bottom-black p-6 w-80 shadow-[4px_4px_0_#000] text-black">
+            <div class="bg-[#000080] text-white px-2 py-1 text-xs font-bold mb-4">System_Initialize.exe</div>
+            <p class="font-mono mb-6">Legacy UI detected. Upgrade to 2030?</p>
+            <button onclick="startEvolution()" class="w-full bg-[#c0c0c0] border-2 border-white border-r-black border-b-black py-2 font-bold hover:bg-gray-300 active:translate-y-0.5">INITIALIZE EVOLUTION</button>
+        </div>
+    </div>
 
-    <nav class="fixed top-0 w-full z-50 border-b border-white/5 backdrop-blur-xl bg-black/20">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <span class="syncopate font-bold text-sm tracking-tighter neon-text">BABU_SYSTEMS</span>
-            <div class="flex gap-8 text-[10px] tracking-[0.3em] uppercase font-bold text-white/50">
-                <a href="#work" class="hover:text-cyan-400 transition">Work</a>
-                <a href="#vision" class="hover:text-cyan-400 transition">Vision</a>
-                <a href="mailto:bobcodes26@gmail.com" class="hover:text-cyan-400 transition">Link</a>
+    <canvas id="particleCanvas" class="fixed inset-0 -z-10 opacity-40"></canvas>
+
+    <main id="main-content" class="opacity-0 transition-opacity duration-1000 pt-20">
+        
+        <nav class="fixed top-0 w-full z-50 backdrop-blur-md border-b border-cyan-500/20 bg-slate-950/50">
+            <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="text-2xl font-bold font-['Orbitron'] text-cyan-400 tracking-tighter">BOBCODES<span class="animate-pulse">_</span></div>
+                <div class="hidden md:flex space-x-8 text-sm font-medium tracking-widest uppercase">
+                    <a href="#projects" class="hover:text-cyan-400 transition">Projects</a>
+                    <a href="#skills" class="hover:text-cyan-400 transition">Skills</a>
+                    <a href="#roadmap" class="hover:text-cyan-400 transition">Vision</a>
+                    <a href="#contact" class="hover:text-cyan-400 transition">Contact</a>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    <section class="min-h-screen flex flex-col justify-center items-center px-6 text-center">
-        <p class="text-xs tracking-[0.5em] text-cyan-400/60 mb-4 uppercase font-bold">Autonomous System Architect</p>
-        <h1 class="syncopate text-6xl md:text-9xl font-bold tracking-tighter leading-none mb-6">
-            BABU<span class="neon-text">.</span>
-        </h1>
-        <p class="max-w-xl text-lg text-slate-400 font-light leading-relaxed">
-            Digitizing the rural landscape through <span class="text-white font-medium">AI Automation</span> and <span class="text-white font-medium">Cloud Infrastructure</span>. Building for the next decade.
-        </p>
-        <div class="mt-12 animate-bounce opacity-20">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-        </div>
-    </section>
+        <section class="min-h-screen flex flex-col items-center justify-center text-center px-6">
+            <h1 class="text-6xl md:text-8xl font-['Orbitron'] font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]">
+                BOBCODES
+            </h1>
+            <div class="h-8 mt-4">
+                <p id="typing" class="text-xl md:text-2xl text-cyan-100/70 font-mono italic"></p>
+            </div>
+            <div class="mt-12 flex flex-wrap justify-center gap-6">
+                <a href="#projects" class="neon-btn">VIEW PROJECTS</a>
+                <a href="#contact" class="neon-btn-secondary">CONTACT</a>
+            </div>
+        </section>
 
-    <section id="work" class="max-w-7xl mx-auto px-6 py-32">
-        <h2 class="syncopate text-2xl mb-16 flex items-center gap-6">
-            <span class="h-px w-20 bg-cyan-500/30"></span> 
-            ACTIVE_MODULES
-        </h2>
+        <section class="max-w-4xl mx-auto py-24 px-6">
+            <div class="glass p-8 md:p-12 rounded-2xl border border-cyan-500/20 relative overflow-hidden group">
+                <div class="absolute -right-20 -top-20 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl group-hover:bg-cyan-500/20 transition-all"></div>
+                <h2 class="text-3xl font-['Orbitron'] text-cyan-400 mb-6">Architecting the Future</h2>
+                <p class="text-lg leading-relaxed text-slate-400">
+                    Bobcodes isn't just a developer; I'm a system architect specializing in <span class="text-cyan-300">Automation Ecosystems</span> and <span class="text-cyan-300">AI-Integrated Workflows</span>. From neural-assisted utility tools to complex retail management systems, I build software designed to scale beyond the present. 
+                </p>
+            </div>
+        </section>
 
-        <div class="grid md:grid-cols-2 gap-12">
-            <div class="glow-box p-8 rounded-2xl relative overflow-hidden group">
-                <div class="absolute -right-10 -top-10 text-8xl font-bold text-white/5 opacity-10 group-hover:opacity-20 transition">01</div>
-                <h3 class="syncopate text-xl mb-4 text-cyan-400">BLUEBOT ENGINE</h3>
-                <p class="text-slate-400 mb-8 leading-relaxed">A specialized LPG management ecosystem. Handling consumer analytics, real-time inventory, and automated delivery logs.</p>
-                <div class="flex gap-3">
-                    <span class="text-[10px] font-bold border border-white/10 px-3 py-1 rounded-full uppercase">Firebase</span>
-                    <span class="text-[10px] font-bold border border-white/10 px-3 py-1 rounded-full uppercase">React_Core</span>
+        <section id="skills" class="max-w-7xl mx-auto py-24 px-6">
+            <h2 class="text-center text-4xl font-['Orbitron'] mb-16 text-white">Neural Core Skills</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                <div class="skill-card">Python</div>
+                <div class="skill-card">JavaScript</div>
+                <div class="skill-card">Apps Script</div>
+                <div class="skill-card">Automation</div>
+                <div class="skill-card">API Engine</div>
+                <div class="skill-card">Full-Stack</div>
+            </div>
+        </section>
+
+        <section id="projects" class="max-w-7xl mx-auto py-24 px-6">
+            <div class="flex justify-between items-end mb-12">
+                <h2 class="text-4xl font-['Orbitron']">Live Projects</h2>
+                <div class="flex gap-4">
+                    <button class="filter-btn active" onclick="filterProjects('all')">All</button>
+                    <button class="filter-btn" onclick="filterProjects('ai')">AI</button>
+                    <button class="filter-btn" onclick="filterProjects('automation')">Auto</button>
                 </div>
             </div>
 
-            <div class="glow-box p-8 rounded-2xl relative overflow-hidden group">
-                <div class="absolute -right-10 -top-10 text-8xl font-bold text-white/5 opacity-10 group-hover:opacity-20 transition">02</div>
-                <h3 class="syncopate text-xl mb-4 text-cyan-400">TELE_SYNC</h3>
-                <p class="text-slate-400 mb-8 leading-relaxed">High-speed affiliate automation. Bridges Google Sheets logic with Telegram API to deploy instant market deals.</p>
-                <div class="flex gap-3">
-                    <span class="text-[10px] font-bold border border-white/10 px-3 py-1 rounded-full uppercase">Python</span>
-                    <span class="text-[10px] font-bold border border-white/10 px-3 py-1 rounded-full uppercase">Automation</span>
+            <div class="grid md:grid-cols-2 gap-8" id="project-grid">
+                <div class="project-card glass group" data-category="automation">
+                    <div class="h-48 bg-slate-800 rounded-t-xl overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc51?w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-cyan-400 mb-2">Bluebot</h3>
+                        <p class="text-slate-400 mb-4 text-sm">Next-gen Gas Agency Management & Smart Inventory Dashboard.</p>
+                        <div class="flex gap-2 mb-6">
+                            <span class="text-[10px] border border-cyan-500/30 px-2 py-1 rounded">Firebase</span>
+                            <span class="text-[10px] border border-cyan-500/30 px-2 py-1 rounded">JS Realtime</span>
+                        </div>
+                        <div class="flex gap-4">
+                            <a href="https://demo.bluebot.app" target="_blank" class="text-xs font-bold text-cyan-400 hover:underline">LIVE DEMO</a>
+                            <a href="#" class="text-xs font-bold text-slate-500 hover:text-white transition">GITHUB</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card glass group" data-category="automation">
+                    <div class="h-48 bg-slate-800 rounded-t-xl overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-cyan-400 mb-2">Telegram Deal Bot</h3>
+                        <p class="text-slate-400 mb-4 text-sm">Automated affiliate engine posting deal streams via Google Sheets.</p>
+                        <div class="flex gap-2 mb-6">
+                            <span class="text-[10px] border border-cyan-500/30 px-2 py-1 rounded">Python</span>
+                            <span class="text-[10px] border border-cyan-500/30 px-2 py-1 rounded">GAS API</span>
+                        </div>
+                        <div class="flex gap-4">
+                            <a href="https://demo.dealautomation.app" target="_blank" class="text-xs font-bold text-cyan-400 hover:underline">LIVE DEMO</a>
+                            <a href="#" class="text-xs font-bold text-slate-500 hover:text-white transition">GITHUB</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="vision" class="py-32 border-t border-white/5">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <h2 class="syncopate text-4xl md:text-6xl mb-12 opacity-80 italic">BUILD_THE_FUTURE</h2>
-            <p class="text-slate-500 mb-16 tracking-widest uppercase text-sm">Now recruiting ideas for 2030 rural development.</p>
-            <a href="mailto:bobcodes26@gmail.com" class="syncopate border-b-2 border-cyan-500 pb-2 text-xl hover:text-cyan-400 transition">CONTACT_PORTAL</a>
-        </div>
-    </section>
+        <section id="roadmap" class="max-w-5xl mx-auto py-24 px-6">
+            <h2 class="text-center text-4xl font-['Orbitron'] mb-16">Vision 2030 Roadmap</h2>
+            <div class="space-y-12 relative before:absolute before:left-4 md:before:left-1/2 before:w-0.5 before:h-full before:bg-cyan-500/20">
+                <div class="relative flex flex-col md:flex-row items-center group">
+                    <div class="md:w-1/2 md:text-right md:pr-12 mb-4 md:mb-0">
+                        <h4 class="text-cyan-400 font-bold">Q4 2026</h4>
+                        <p class="text-white font-semibold">AI Rural-Agri Platform</p>
+                    </div>
+                    <div class="absolute left-4 md:left-1/2 -translate-x-1/2 w-4 h-4 bg-cyan-500 rounded-full shadow-[0_0_10px_#06b6d4] z-10"></div>
+                    <div class="md:w-1/2 md:pl-12">
+                        <p class="text-sm text-slate-500">Connecting rural farmers to automation tools.</p>
+                    </div>
+                </div>
+                <div class="relative flex flex-col md:flex-row items-center group">
+                    <div class="md:w-1/2 md:text-right md:pr-12 mb-4 md:mb-0 order-2 md:order-1">
+                        <p class="text-sm text-slate-500">Universal voice-first smart home ecosystem.</p>
+                    </div>
+                    <div class="absolute left-4 md:left-1/2 -translate-x-1/2 w-4 h-4 bg-cyan-500 rounded-full shadow-[0_0_10px_#06b6d4] z-10"></div>
+                    <div class="md:w-1/2 md:pl-12 order-1 md:order-2">
+                        <h4 class="text-cyan-400 font-bold">2028</h4>
+                        <p class="text-white font-semibold">Smart Home Voice Protocol</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <footer class="py-12 text-center text-[10px] tracking-[0.5em] text-white/20">
-        © 2026 BABU_SYTEMS // ODISHA_CORE
-    </footer>
+        <section id="contact" class="max-w-4xl mx-auto py-24 px-6 text-center">
+            <h2 class="text-4xl font-['Orbitron'] mb-8">Establish Connection</h2>
+            <p class="text-slate-400 mb-12">Ready to automate your world? Drop a transmission.</p>
+            <a href="mailto:bobcodes26@gmail.com" class="neon-btn text-xl px-12 py-6">
+                EMAIL: bobcodes26@gmail.com
+            </a>
+        </section>
 
+        <footer class="py-12 border-t border-cyan-500/10 text-center text-slate-600 text-sm tracking-widest uppercase">
+            Building systems that still work in 2030 &copy; Bobcodes
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
